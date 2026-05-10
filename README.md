@@ -59,7 +59,7 @@ Visual Studio
 Android NDK  
 
 > [!note]
->Mentioned Dependencies Static library are not provided with this project; To compile it, add them to the following path with respect to the platform you want to compile for OR see pch header file for "NO_FLAGS" to build without specific Dependency.  
+>Mentioned Dependencies Static libraries are not provided with this project; To compile it, add them to the following path with respect to the platform you want to compile for OR see pch header file for "NO_FLAGS" to build without specific Dependency.  
 >Path: include/lib/TARGET_ARCH/DependencyName/StaticLibrary
 
 
