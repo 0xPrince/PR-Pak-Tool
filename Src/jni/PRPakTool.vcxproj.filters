@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Game">
+    </Filter>
+    <Filter Include="Utils">
+    </Filter>
+    <Filter Include="Utils\Custom">
+    </Filter>
+    <Filter Include="include">
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="EntryPoint">
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Core">
+    </Filter>
+    <Filter Include="Core\Creds">
+    </Filter>
+    <Filter Include="Core\Pak">
+    </Filter>
+    <Filter Include="Core\Misc">
+    </Filter>
+    <Filter Include="include\AES">
+    </Filter>
+    <Filter Include="include\SM4">
+    </Filter>
+    <Filter Include="include\Oodle">
+    </Filter>
+    <Filter Include="include\ZUC">
+    </Filter>
+    <Filter Include="Unpacker">
+    </Filter>
+    <Filter Include="include\SHA">
+    </Filter>
+    <Filter Include="EntryPoint\Handler">
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EntryPoint\PR_Pak_Tool.cpp">
+      <Filter>EntryPoint</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Cred\CredsManager.cpp">
+      <Filter>Core\Creds</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Pak\PakManager.cpp">
+      <Filter>Core\Pak</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Misc\Compression.cpp">
+      <Filter>Core\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="include\SM4\SM4.cpp">
+      <Filter>include\SM4</Filter>
+    </ClCompile>
+    <ClCompile Include="include\ZUC\ZUC.cpp">
+      <Filter>include\ZUC</Filter>
+    </ClCompile>
+    <ClCompile Include="Unpacker\UnPacker.cpp">
+      <Filter>Unpacker</Filter>
+    </ClCompile>
+    <ClCompile Include="EntryPoint\Handler\PakHandler.cpp">
+      <Filter>EntryPoint\Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\Offsets.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game\Offsets.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cred\CredsManager.h">
+      <Filter>Core\Creds</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Pak\Enums.h">
+      <Filter>Core\Pak</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Pak\PakManager.h">
+      <Filter>Core\Pak</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Custom\CustomDataArray.hpp">
+      <Filter>Utils\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Utils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Pak\Structure.h">
+      <Filter>Core\Pak</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Cred\Structure.h">
+      <Filter>Core\Creds</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="include\AES\AES.hpp">
+      <Filter>include\AES</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Misc\Compression.h">
+      <Filter>Core\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SM4\SM4.h">
+      <Filter>include\SM4</Filter>
+    </ClInclude>
+    <ClInclude Include="include\oodle\include\oodle.hpp">
+      <Filter>include\Oodle</Filter>
+    </ClInclude>
+    <ClInclude Include="include\SM4\Data.h">
+      <Filter>include\SM4</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ZUC\Data.h">
+      <Filter>include\ZUC</Filter>
+    </ClInclude>
+    <ClInclude Include="include\ZUC\ZUC.h">
+      <Filter>include\ZUC</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\Custom\PRLog.h">
+      <Filter>Utils\Custom</Filter>
+    </ClInclude>
+    <ClInclude Include="Unpacker\UnPacker.h">
+      <Filter>Unpacker</Filter>
+    </ClInclude>
+    <ClInclude Include="Unpacker\Handler.hpp">
+      <Filter>Unpacker</Filter>
+    </ClInclude>
+    <ClInclude Include="Macros.h" />
+    <ClInclude Include="include\SHA\SHA.hpp">
+      <Filter>include\SHA</Filter>
+    </ClInclude>
+    <ClInclude Include="EntryPoint\Handler\Stucture.h">
+      <Filter>EntryPoint\Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="EntryPoint\Handler\PakHandler.hpp">
+      <Filter>EntryPoint\Handler</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
