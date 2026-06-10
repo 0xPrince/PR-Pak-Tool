@@ -5,7 +5,6 @@
 Author: 0xPrince
 */
 
-
 namespace Utils
 {
 	namespace Memory

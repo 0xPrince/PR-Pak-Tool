@@ -2,9 +2,10 @@
 #define PCH_H
 
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 0
+#define MINOR_VERSION 10
 
-
+//--NO_FLAGS
+// 
 //#ifndef NO_ZLIB
 //#define NO_ZLIB
 //#endif 
@@ -12,16 +13,14 @@
 //#ifndef NO_ZSTD
 //#define NO_ZSTD
 //#endif
-
+//
 //#ifndef NO_OODLE
 //#define NO_OODLE
 //#endif 
 
 #if defined(_WIN32)
 #pragma comment(lib,"crypt32.lib")
-#pragma comment(lib,"Ws2_32.lib")
 #pragma comment(lib,"openssl\\libcrypto.lib")
-
 #if !defined(NO_ZLIB)
 #pragma comment(lib,"zlib\\libzlib.lib")
 #endif 

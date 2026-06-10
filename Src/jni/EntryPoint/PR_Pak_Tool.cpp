@@ -106,10 +106,12 @@ void PrintUsage()
 	PRINT(PrintType_NONE, " -output\tOutput Dir Path[Default: %s].\n","App_Starting_Path/");
 	PRINT(PrintType_NONE, "-----------------------------------\n\n");
 }
+
+
 extern "C" int main(int argc, char* argv[])
 {
 	setlocale(LC_ALL, ".UTF8");
-	
+
 	GetExeDirPath(argv, argc);
 	PrintHeader();
 

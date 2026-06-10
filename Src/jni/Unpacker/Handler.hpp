@@ -58,7 +58,7 @@ int Handler::HandleDataSection(C_Array<PakFileInfo>* _FileMetaList)
 		auto EntryHandleStatus = HandleEntry(_FileInfo);
 		if (EntryHandleStatus != 1)
 		{
-			PRINT(PrintType_ERROR, "Failed to Handle File, Status: %04d, Name: %s", EntryHandleStatus, _FileInfo->FileMeta.Name);
+			PRINT(PrintType_ERROR, "Failed to Handle File, Status: %04d, Name: %s\n", EntryHandleStatus, _FileInfo->FileMeta.Name);
 			continue;
 		}
 		++ProcessedCount;
@@ -85,7 +85,7 @@ int Handler::HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _File
 		CurrDirBlockSize = _DIRinfo.Parse(TextSection + CurrentFileInfoPos);
 		if (CurrDirBlockSize <= 0)
 		{
-			PRINT(PrintType_ERROR, "Pak DIR Info Parsing Failed, Status: %02lld", CurrDirBlockSize);
+			PRINT(PrintType_ERROR, "Pak DIR Info Parsing Failed,Index: %04u, Status: %02lld\n", DirCurrentIndex, CurrDirBlockSize);
 			break;
 		}
 		CurrentFileInfoPos += CurrDirBlockSize;
@@ -96,7 +96,7 @@ int Handler::HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _File
 			CurrDirBlockSize = _DataFileinfo.Parse(TextSection + CurrentFileInfoPos, &_PakManager->GetPakFileInfo()->Header);
 			if (CurrDirBlockSize <= 0)
 			{
-				PRINT(PrintType_ERROR, "Pak Entry Meta Info Parsing Failed, Status: %02lld", CurrDirBlockSize);
+				PRINT(PrintType_ERROR, "Pak Entry Meta Info Parsing Failed, Index: %04u, Status: %02lld\n", FileIndex, CurrDirBlockSize);
 				break;
 			}
 			CurrentFileInfoPos += CurrDirBlockSize;
@@ -104,7 +104,7 @@ int Handler::HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _File
 
 			if (_DataFileinfo.DataIndex > _IndexHeader->NumEntries)
 			{
-				PRINT(PrintType_ERROR, "Invalid Data Index, Index %02d, FilePath: %s", _DataFileinfo.DataIndex, TempFileName.data());
+				PRINT(PrintType_ERROR, "Invalid Data Index, Index %02d, FilePath: %s\n", _DataFileinfo.DataIndex, TempFileName.data());
 				continue;
 			}
 
@@ -124,7 +124,7 @@ int Handler::HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _File
 			auto EntryHandleStatus = HandleEntry(_FileInfo);
 			if (EntryHandleStatus != 1)
 			{
-				PRINT(PrintType_ERROR, "Failed to Handle File, Status: %04d, Name: %s", EntryHandleStatus, _FileInfo->FileMeta.Name);
+				PRINT(PrintType_ERROR, "Failed to Handle File, Status: %04d, Name: %s\n", EntryHandleStatus, _FileInfo->FileMeta.Name);
 				continue;
 			}
 			++ProcessedCount;

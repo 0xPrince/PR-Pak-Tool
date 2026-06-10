@@ -61,7 +61,8 @@ int PakHandler::LoadPakFile(FILE* _PakFile, PakLoadData* _LoadData)
 
 	PRINT(PrintType_INFO, "Pak Version: %u", PakHeader->Version);
 	Offsets::Init(Game_ID, PakHeader->Version);
-	if (auto IdxInf_Status = _PakManager->InitIndexInfo() != 1)
+	auto IdxInf_Status = _PakManager->InitIndexInfo();
+	if (IdxInf_Status != 1)
 	{
 		PRINT(PrintType_ERROR, "Invalid IndexInfo - Unsupported or Invalid File, Status: %04d", IdxInf_Status);
 		return -3;

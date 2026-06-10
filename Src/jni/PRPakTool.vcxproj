@@ -127,6 +127,8 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <DebugInformationFormat>None</DebugInformationFormat>
       <UseFullPaths>false</UseFullPaths>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+      <Optimization>MaxSpeed</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -135,6 +137,7 @@
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)include\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AssemblyDebug>false</AssemblyDebug>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -182,6 +185,7 @@
     <ClInclude Include="EntryPoint\Handler\Stucture.h" />
     <ClInclude Include="include\oodle\include\oodle.hpp" />
     <ClInclude Include="include\SHA\SHA.hpp" />
+    <ClInclude Include="include\SHA\SHAHash.hpp" />
     <ClInclude Include="include\SM4\Data.h" />
     <ClInclude Include="Core\Misc\Compression.h" />
     <ClInclude Include="include\SM4\SM4.h" />

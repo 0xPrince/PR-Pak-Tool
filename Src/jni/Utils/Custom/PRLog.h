@@ -2,6 +2,7 @@
 /*
 Author: 0xPrince
 */
+
 extern bool bShowLogs;
 
 enum PrintType

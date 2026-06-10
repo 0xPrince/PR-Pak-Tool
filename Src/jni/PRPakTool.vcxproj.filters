@@ -125,6 +125,9 @@
     <ClInclude Include="include\SHA\SHA.hpp">
       <Filter>include\SHA</Filter>
     </ClInclude>
+    <ClInclude Include="include\SHA\SHAHash.hpp">
+      <Filter>include\SHA</Filter>
+    </ClInclude>
     <ClInclude Include="EntryPoint\Handler\Stucture.h">
       <Filter>EntryPoint\Handler</Filter>
     </ClInclude>

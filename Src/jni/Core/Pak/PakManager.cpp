@@ -95,10 +95,10 @@ int PakManager::GetIndexData(C_Array<uint8_t>* IndexData)
 			auto PakEncData_Status = GetPakEncryptionData();
 			if (PakEncData_Status != 1)
 			{
-				return 0x100 + PakEncData_Status;
+				return -(0x100 + PakEncData_Status);
 			}
 		}
-		if (DecryptIndexData(IndexData) != 1)return -3/*Decryption Failure*/;
+		if (DecryptIndexData(IndexData) != 1) return -3/*Decryption Failure*/;
 	}
 
 	return 1;
@@ -133,7 +133,7 @@ int PakManager::InitIndexInfo()
 		*(uint8_t*)(&HeaderKeys[(int)Offsets::Header::Keys.bEncryptedIndex]) :
 		_info->Header.bEncryptedIndex;
 
-	if (_info->Header.IndexOffset <1 || _info->Header.IndexOffset > PakFileSize ||
+	if (_info->Header.IndexOffset <0 || _info->Header.IndexOffset > PakFileSize ||
 		_info->Header.IndexSize <1 || _info->Header.IndexSize > PakFileSize)
 		return -5/*Likely Decryption Failure*/;
 
@@ -152,7 +152,7 @@ int PakManager::InitIndexInfo()
 int PakManager::GetPakEncryptionData()
 {
 	auto StartOffset = PakFileSize - (sizeof(PakInfoHeader) + Offsets::Header::PakFileHeaderPadding + sizeof(PakEncryptionInfo));
-	if (StartOffset <= 1000) return -1;
+	if (StartOffset <= 100) return -1;
 
 	if (Read(StartOffset, &_info->EncryptionData, sizeof(PakEncryptionInfo)) != sizeof(PakEncryptionInfo)) return -1;
 

@@ -2,6 +2,7 @@
 /*
 Author: 0xPrince
 */
+
 template <typename type>
 struct C_Array
 {
