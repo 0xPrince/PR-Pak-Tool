@@ -10,7 +10,7 @@
 ## Supported Games
 | Title| Supported Version |
 |------|-------------------|
-| **PUBGM Global Variants** | Initial - v4.3 |
+| **PUBGM Global Variants** | Initial - v4.4 |
 | **PUBGM Lite** | Initial - v0.27 |
 | **Game For Peace** | Initial - v1.35 |
 
@@ -63,6 +63,15 @@ Android NDK
 >Path: include/lib/TARGET_ARCH/DependencyName/StaticLibrary
 
 
+### Version History
+v1.0 
+  * Initial Release  
+
+v1.10
+  * Added Support For PUBGM v4.4
+  * Fixed Some Minor Issues
+
+---
 
 ### Disclaimer
 *This software is provided 'as-is', without any express or implied warranty. shared solely for educational purposes. It is not intended to harm any entity and In no event will the authors be held liable for any damages arising from the use of this software.*
