@@ -44,7 +44,7 @@ chmod 755 PRPakTool
 >if the output path is not specified in cli, the processed files will be in the same place where the tool exists
 
 
-### Compiled Binaries
+### Download
 [Check out Releases](https://github.com/0xPrince/PR-Pak-Tool/releases)
 
 
