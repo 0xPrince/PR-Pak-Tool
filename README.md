@@ -43,33 +43,30 @@ chmod 755 PRPakTool
 > [!note]
 >if the output path is not specified in cli, the processed files will be in the same place where the tool exists
 
-## Required Dependencies
+
+### Compiled Binaries
+[Check out Releases](https://github.com/0xPrince/PR-Pak-Tool/releases)
+
+
+## How to compile
+
+#### Required Tools
+Windows
+* Visual Studio
+
+Android
+* Android NDK  
+
+#### Required Dependencies
 
 * OpenSSL crypto  
 * Oodle  
 * ZLib  
 * ZSTD  
 
-
-## How to compile
-
-#### Windows
-Visual Studio
-#### Android
-Android NDK  
-
 > [!note]
 >Mentioned Dependencies Static libraries are not provided with this project; To compile it, add them to the following path with respect to the platform you want to compile for OR see pch header file for "NO_FLAGS" to build without specific Dependency.  
 >Path: include/lib/TARGET_ARCH/DependencyName/StaticLibrary
-
-
-### Version History
-v1.0 
-  * Initial Release  
-
-v1.10
-  * Added Support For PUBGM v4.4
-  * Fixed Some Minor Issues
 
 ---
 
