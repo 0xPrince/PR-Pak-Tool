@@ -10,9 +10,9 @@
 ## Supported Games
 | Title| Supported Version |
 |------|-------------------|
-| **PUBGM Global Variants** | Initial - v4.4 |
+| **PUBGM Global Variants** | Initial - v4.7 |
 | **PUBGM Lite** | Initial - v0.27 |
-| **Game For Peace** | Initial - v1.35 |
+| **Game For Peace** | Initial - v1.36 |
 
 > [!note]
 >Currently Supports Only Unpacking
