@@ -1,7 +1,23 @@
 #pragma once
 /*
+A Cross Platform Dynamic Array Written in C  
 Author: 0xPrince
 */
+
+#if defined(_WIN32)
+#define __msize(ptr) _msize(ptr)
+#elif defined(__APPLE__)
+#define __msize(ptr) malloc_size(ptr)
+#elif defined(__linux__)
+#define __msize(ptr) malloc_usable_size(ptr)
+#else
+#error Unknown Undefined Platform 
+#endif
+
+
+#ifdef __cplusplus
+#include <initializer_list>
+#endif
 
 template <typename type>
 struct C_Array
@@ -17,6 +33,28 @@ public:
 		Data = NULL;
 		Size = Capacity = NULL;
 	}
+
+	C_Array(const type& Buff)
+	{
+		assign(Buff, sizeof(Buff));
+	}
+	C_Array(const type* Buff)
+	{
+		assign(Buff, __msize((void*)Buff) / sizeof(type));
+	}
+
+	C_Array(const type* Buff,size_t BuffSz)
+	{
+		assign(Buff, BuffSz);
+	}
+
+#ifdef __cplusplus
+	C_Array(std::initializer_list<type> elems)
+	{
+		assign(elems.begin(), elems.size());
+	}
+#endif
+
 
 	~C_Array()
 	{
@@ -51,25 +89,36 @@ public:
 	{
 
 		if (Capacity >= _NewCapacity || _NewCapacity < 1) return;
-		auto NewCapacityInBytes = _NewCapacity * sizeof(type);
-		auto NewAlloc = (type*)malloc(NewCapacityInBytes);
-		if (NewAlloc)
-		{
-			//ZeroMemory
-			memset(NewAlloc, 0, NewCapacityInBytes);
 
-			if (Size > Capacity) Size = Capacity;
-			if (Data && Size > 0)
+
+		auto NewCapacityInBytes = _NewCapacity * sizeof(type);
+
+		auto NewAlloc = (type*)malloc(NewCapacityInBytes);
+		if (!NewAlloc)
+		{
+			__ASSERT(NewAlloc != NULL, "C_Array Reallocation Failure");
+			return;
+		}
+
+		//ZeroMemory
+		memset(NewAlloc, 0, NewCapacityInBytes);
+
+		if (Size > Capacity) Size = Capacity;
+		if (Data)
+		{
+			if (Size > 0) 
 			{
 				//Copy Old Buffer To New
 				memcpy(NewAlloc, Data, Size * sizeof(type));
-
-				free(Data); Data = NULL;
 			}
+
+			free(Data); Data = NULL;
 		}
 
 		Data = NewAlloc;
 		Capacity = Data ? _NewCapacity : NULL;
+
+
 	}
 	void resize(size_t _size)
 	{
@@ -80,7 +129,7 @@ public:
 	}
 	void zero()
 	{
-		if (!Data|| Capacity <= 0) return;
+		if (!Data || Capacity <= 0) return;
 		memset(Data, 0, Capacity * sizeof(type));
 	}
 	void insert(const type& _Val)
@@ -90,12 +139,12 @@ public:
 		if (!this->Data) return;
 		Data[Size++] = _Val;
 	}
-	void assign(type* _buff, size_t _size)
+	void assign(const type* _buff, size_t _size)
 	{
 		if (!_buff || _size <= 0) return;
 
 		reserve(_size);
-		
+
 		if (!this->Data) return;
 
 		memcpy(Data, _buff, _size * sizeof(type));
@@ -105,9 +154,9 @@ public:
 	void append(type* _buff, size_t _size)
 	{
 		if (!_buff || _size <= 0) return;
-		
+
 		reserve(Size + _size);
-		
+
 		if (!this->Data) return;
 
 		auto NwSize = _size * sizeof(type);
@@ -125,7 +174,8 @@ public:
 				if (Data[i] == _Val) return i;
 			}
 		}
-		
+
 		return -1;
 	}
+	
 };

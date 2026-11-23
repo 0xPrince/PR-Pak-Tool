@@ -1,5 +1,6 @@
 #pragma once
 
+//TODO: Seperate Pak Version Info For Each Game
 enum class PakFile_Version
 {
 	NONE = 0x00,

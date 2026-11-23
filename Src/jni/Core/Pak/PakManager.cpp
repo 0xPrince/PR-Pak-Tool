@@ -64,9 +64,9 @@ int PakManager::GetIndexAES_Key(C_Array<uint8_t>* GeneratedKey, C_Array<uint8_t>
 	m_data.resize(0);
 	m_data.assign(_info->EncryptionData.IndexIV_Data, sizeof(_info->EncryptionData.IndexIV_Data));
 	KeyStatus = Cred_Manager->GenerateKey(IndexRSA_Data, &m_data, GeneratedIV);
-	
+
 	Utils::Memory::FreeMem(IndexRSA_Data); m_data.clear();
-	
+
 	if (KeyStatus != 1)
 	{
 		return 0x200 + KeyStatus;
@@ -115,7 +115,7 @@ int PakManager::InitIndexInfo()
 	HeaderKeys.reserve(Offsets::Header::Z_Field_Count);
 	if (HeaderKeys.capacity() != Offsets::Header::Z_Field_Count) return -3/*Alloc Failure*/;
 
-	ZUC::GenerateKeyArray(Offsets::Header::Z_Fields_Key, Offsets::Header::Z_Fields_IV,
+	ZUC::GenerateKeyArray(Offsets::Header::Z_Fields_Key.data(), Offsets::Header::Z_Fields_IV.data(),
 		HeaderKeys.data(), HeaderKeys.capacity());
 
 	if (HeaderKeys[0] == HeaderKeys[Offsets::Header::Z_Field_Count - 1])
@@ -164,7 +164,7 @@ int PakManager::DecryptIndexData(C_Array<uint8_t>* IndexData)
 	if (_info->Header.Version < (int)PakFile_Version::IndexAESEncryption ||
 		Game_ID == GameID::PUBGM_CN/*Have Different Version System */)
 	{
-		Utils::Misc::XORBuffers(IndexData->data(), _info->Header.IndexSize, Offsets::IndexData::XORKey, 16/*Why const?*/);
+		Utils::Misc::XORBuffers(IndexData->data(), _info->Header.IndexSize, Offsets::IndexData::XORKey.data(), Offsets::IndexData::XORKey.size());
 		return 1;
 	}
 
@@ -300,7 +300,7 @@ int PakManager::DecryptBlock(PakFileInfo* _FileInfo, C_Array<uint8_t>* Block)
 	{
 	case InternalEncryptionFlags::XOR:
 	{
-		Utils::Misc::XORBuffers(Block->data(), Block->size(), Offsets::EntryBlock::XORKey, 16/*Why const?*/);
+		Utils::Misc::XORBuffers(Block->data(), Block->size(), Offsets::EntryBlock::XORKey.data(), Offsets::EntryBlock::XORKey.size());
 		return 1;
 	}
 	case InternalEncryptionFlags::SP:
@@ -330,11 +330,11 @@ EntryEncryptionFlag GetGOPBlockEncryptionFlag(C_Array<uint8_t>* pMemory)
 	if (pMemory->size() >= 8)
 	{
 		const uint64_t MatchRes = 0x7373616D696E694C;
-		if ((*(uint64_t*)(pMemory->data() + 0x00) ^ *(uint64_t*)(Offsets::EntryBlock::SLM_Key + 0x00)) == MatchRes)
+		if ((*(uint64_t*)(pMemory->data() + 0x00) ^ *(uint64_t*)(Offsets::EntryBlock::SLM_Key.data() + 0x00)) == MatchRes)
 		{
 			return EntryEncryptionFlag::LM_SXR;
 		}
-		
+
 		{
 			int n = sizeof(MatchRes);
 			while (--n > 0 && (*(uint8_t*)(pMemory->data() + n) ^ (Offsets::EntryBlock::ST_XorKey + n)) == ((uint8_t*)&MatchRes)[n]);
@@ -349,7 +349,7 @@ EntryEncryptionFlag GetGOPBlockEncryptionFlag(C_Array<uint8_t>* pMemory)
 
 int PakManager::DecryptBlock_LM(PakFileInfo* _FileInfo, size_t FilePos, C_Array<uint8_t>* pMemory)
 {
-//	if (!Utils::IO::isFileExtension(_FileInfo->FileMeta.Name, ".ini")) return 1;
+	//	if (!Utils::IO::isFileExtension(_FileInfo->FileMeta.Name, ".ini")) return 1;
 
 	if (FilePos == 0 && _FileInfo->entry.EncryptionFlag == (int)EntryEncryptionFlag::NONE)
 	{
@@ -360,13 +360,13 @@ int PakManager::DecryptBlock_LM(PakFileInfo* _FileInfo, size_t FilePos, C_Array<
 
 	if (_FileInfo->entry.EncryptionFlag == (int)EntryEncryptionFlag::LM_SXR)
 	{
-		Utils::Misc::XORBuffers(pMemory->data(), pMemory->size(), Offsets::EntryBlock::SLM_Key, 16);
+		Utils::Misc::XORBuffers(pMemory->data(), pMemory->size(), Offsets::EntryBlock::SLM_Key.data(), Offsets::EntryBlock::SLM_Key.size());
 		return 1;
 	}
 
 	if (_FileInfo->entry.EncryptionFlag == (int)EntryEncryptionFlag::LM_STXR)
 	{
-		const int MaxN = sizeof(uint64_t)+1;
+		const int MaxN = sizeof(uint64_t) + 1;
 
 		size_t Indx = 0, nIndx = FilePos, SkpNum = 0xFF;
 		if (nIndx >= Offsets::MaxCompressedBlockSize)  nIndx += ((nIndx / Offsets::MaxCompressedBlockSize) - 1);
@@ -383,7 +383,7 @@ int PakManager::DecryptBlock_LM(PakFileInfo* _FileInfo, size_t FilePos, C_Array<
 		}
 		return 1;
 	}
-	
+
 	return 1;
 }
 
@@ -404,7 +404,7 @@ void PakManager::GetBlockIndices(PakEntry* _entry, C_Array<int>* RetIds, bool bI
 
 	auto EncMethod = GetBlockEncryptionMethod(_entry);
 	if (NumBlocks < 2 || _entry->bEncrypted != 0x1 ||
-		EncMethod != InternalEncryptionFlags::SM4 &&
+		(EncMethod != InternalEncryptionFlags::SM4) &&
 		!(EncMethod == InternalEncryptionFlags::DYN &&
 			_entry->EncryptionFlag == (int)EntryEncryptionFlag::DYN_SM4))
 	{
@@ -415,7 +415,7 @@ void PakManager::GetBlockIndices(PakEntry* _entry, C_Array<int>* RetIds, bool bI
 	}
 
 
-	static C_Array<int> Indices; 
+	static C_Array<int> Indices;
 	Indices.reserve(NumBlocks); Indices.resize(0);
 
 	int seed = NumBlocks;
@@ -539,7 +539,6 @@ int PakManager::InitCompressionDictionary(C_Array<PakFileInfo>* PakEntries, PakI
 		return -2/*Read Error*/;
 
 	_IndexHeader->CompressionDictionary.reserve(CompDictionary.DictSize);
-
 	if (Read(dictEntry.entry.Offset + offset_of(CompressionDictEntry, CompressionDictEntry::Buffer),
 		_IndexHeader->CompressionDictionary.data(), CompDictionary.DictSize) != CompDictionary.DictSize)
 		return -3/*Buff Read Error*/;
@@ -553,10 +552,11 @@ int PakManager::InitCompressionDictionary(C_Array<PakFileInfo>* PakEntries, PakI
 
 int PakFileInfo::Parse(uint8_t* _EntryStart, PakInfoHeader* Header)
 {
-	//MESS
+	//TODO: Cleanup MESS 
 	size_t EntryStartOffset = 0;
 
-	if (Header->Version < (int)PakFile_Version::IndexTextSection)
+	if (Offsets::Game_ID != GameID::PUBGM_CN &&
+		Header->Version < (int)PakFile_Version::IndexTextSection)
 	{
 		int MetaSize = FileMeta.Parse(_EntryStart, Header);
 		if (MetaSize < 1) return -0x800 + MetaSize;
@@ -584,7 +584,7 @@ int PakFileInfo::Parse(uint8_t* _EntryStart, PakInfoHeader* Header)
 	if (Header->Version >= (int)PakFile_Version::MultiCompression)
 	{
 		entry.CompressionBlockSize = Utils::Memory::ReadBuffer<uint32_t>(EntryStart + offset); offset += sizeof(entry.CompressionBlockSize);
-	
+
 		if (entry.CompressionBlockSize > Offsets::MaxCompressedBlockSize) return -2;/*Invalid ?*/
 
 		entry.bEncrypted = Utils::Memory::ReadBuffer<uint8_t>(EntryStart + offset); offset += sizeof(entry.bEncrypted);
@@ -625,7 +625,7 @@ int PakIndexHeader::Parse(C_Array<uint8_t>* IndexData)
 	bIsMiniPak = MountPointLength > sizeof(RootMountPoint);
 
 	MountPoint = (char*)(IndexData->data() + Offset + (bIsMiniPak ? sizeof(RootMountPoint) - 1 : 0)); Offset += MountPointLength;
-	
+
 	NumEntries = Utils::Memory::ReadBuffer<uint32_t>(IndexData->data() + Offset); Offset += sizeof(NumEntries);
 	FileEntryList = (IndexData->data() + Offset);
 	return 1;
@@ -652,7 +652,9 @@ int FileData::Parse(uint8_t* DirEntryStart, PakInfoHeader* Header)
 		Utils::Text::ConvertUnicodeToUTF8((W_CHAR*)Name, NameLength, (char*)Name, NameLength * 2);
 	}
 
-	if (Header->Version >= (int)PakFile_Version::IndexTextSection)
+	DataIndex = -1;
+	if (Offsets::Game_ID == GameID::PUBGM_CN ||
+		Header->Version >= (int)PakFile_Version::IndexTextSection)
 	{
 		DataIndex = Utils::Memory::ReadBuffer<int32_t>(DirEntryStart + Offset);  Offset += sizeof(DataIndex);
 		if (DataIndex < 0)
@@ -671,7 +673,7 @@ int EntryDirInfo::Parse(uint8_t* FileNameEntry)
 	if (NameLength < 0)
 	{
 		PRINT(PrintType_ERROR, "Negetive Dir NameLength: %04d, No Implementation", NameLength);
-	
+
 	}
 	else
 	{

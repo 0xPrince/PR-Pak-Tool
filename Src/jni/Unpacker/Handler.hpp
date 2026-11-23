@@ -30,6 +30,7 @@ public:
 	}
 
 	int HandleEntry(PakFileInfo* _FileInfo);
+	int HandleEntryEx(FILE* OutFile, PakFileInfo* _FileInfo);
 	int HandleDataSection(C_Array<PakFileInfo>* _FileMetaList);
 	int HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _FileMetaList);
 };
@@ -85,7 +86,7 @@ int Handler::HandleTextSection(uint8_t* TextSection, C_Array<PakFileInfo>* _File
 		CurrDirBlockSize = _DIRinfo.Parse(TextSection + CurrentFileInfoPos);
 		if (CurrDirBlockSize <= 0)
 		{
-			PRINT(PrintType_ERROR, "Pak DIR Info Parsing Failed,Index: %04u, Status: %02lld\n", DirCurrentIndex, CurrDirBlockSize);
+			PRINT(PrintType_ERROR, "Pak DIR Info Parsing Failed,Index: %04lld, Status: %02lld\n", DirCurrentIndex, CurrDirBlockSize);
 			break;
 		}
 		CurrentFileInfoPos += CurrDirBlockSize;
@@ -144,6 +145,15 @@ int Handler::HandleEntry(PakFileInfo* _FileInfo)
 		return -1;
 	}
 
+	auto RetStatus = HandleEntryEx(OutFile, _FileInfo);
+
+	Utils::IO::_CloseFile(OutFile);
+	return RetStatus;
+}
+
+
+int Handler::HandleEntryEx(FILE* OutFile, PakFileInfo* _FileInfo)
+{
 	if (ReadVerifyEntryContent(&_FileInfo->entry, &UnCompressedMemory) == 0)
 	{
 		PRINT(PrintType_WARNING, "Content Hash Mismatched, Pak Entry is Corrupted, Output May NOT be Valid,[0x%llX](%llu) - %s",
@@ -166,6 +176,7 @@ int Handler::HandleEntry(PakFileInfo* _FileInfo)
 			if (EntryStatus != 1)
 			{
 				PRINT(PrintType_ERROR, "Failed To Handle Compressed Block: %04d(%04d)/%04d, Status: %04d", Indx, BlockIndex, _FileInfo->entry.CompressionBlocks.size, EntryStatus);
+				
 				return EntryStatus;
 			}
 
@@ -191,9 +202,6 @@ int Handler::HandleEntry(PakFileInfo* _FileInfo)
 	{
 		PRINT(PrintType_WARNING, "Processed Size != Actual Size Mismatched, Output May NOT be valid, FileName %s", _FileInfo->FileMeta.Name);
 	}
-
-	fclose(OutFile);
-
 	return  EntryStatus;
 }
 

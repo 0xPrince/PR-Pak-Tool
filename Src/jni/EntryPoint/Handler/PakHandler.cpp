@@ -86,8 +86,6 @@ GetIndexDataCode:
 		return -4;
 	}
 
-
-
 	if (_PakManager->ValidateIndexHash(&_LoadData->IndexData) != 1)
 	{
 		_LoadData->IndexData.clear();
@@ -115,7 +113,9 @@ GetIndexDataCode:
 	}
 
 	_LoadData->TextSection = NULL;
-	if (PakHeader->Version >= (int)PakFile_Version::IndexTextSection)
+
+	if (Offsets::Game_ID == GameID::PUBGM_CN ||
+		PakHeader->Version >= (int)PakFile_Version::IndexTextSection)
 	{
 		_LoadData->TextSection = _PakManager->GetTextSection(_LoadData->IndexHeader.FileEntryList + EntryDataSectionEnd, &_LoadData->IndexData);
 		if (_LoadData->TextSection == NULL)

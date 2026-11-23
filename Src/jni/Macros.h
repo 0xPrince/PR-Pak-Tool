@@ -7,7 +7,7 @@
 #define GetBoolStateStr(bState) (bState ? "Enabled" : "Disabled")
 #define _max(a,b) (((a) > (b)) ? (a) : (b))
 #define _min(a,b) (((a) < (b)) ? (a) : (b))
-#define offset_of(s,m) ((unsigned int)&(((s*)0)->m))
+#define offset_of(s,m) ((uintptr_t)&(((s*)0)->m))
 
 
 #ifndef _S_ISTYPE
@@ -37,7 +37,7 @@
 #define __ftell(_Stream) _ftelli64(_Stream)
 
 
-#elif defined(__ANDROID__) || defined(UNIX)
+#elif defined(__ANDROID__) || defined(__linux__)
 #define __getcwd getcwd
 #define __chdir chdir
 #define __mkdir(_Path,perm) mkdir(_Path,perm)

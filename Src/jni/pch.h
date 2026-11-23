@@ -2,7 +2,7 @@
 #define PCH_H
 
 #define MAJOR_VERSION 1
-#define MINOR_VERSION 10
+#define MINOR_VERSION 20
 
 //--NO_FLAGS
 // 
@@ -32,10 +32,9 @@
 #if !defined(NO_OODLE)
 #pragma comment(lib,"oodle\\oo2core.lib")
 #endif
-#elif !defined(__ANDROID__) && !defined(UNIX)
-	compiling for a rocket? Non-Linux One?
+#elif !defined(__ANDROID__) && !defined(__linux__)
+#error compiling for a rocket? Non-Linux One?
 #endif
-
 
 
 #include <openssl/bn.h>
@@ -52,7 +51,7 @@
 
 #if defined(_WIN32)
 #include <direct.h>
-#elif defined(__ANDROID__) || defined(UNIX)
+#elif defined(__ANDROID__) || defined(__linux__)
 #include <sys/stat.h>
 #include <unistd.h>
 #endif

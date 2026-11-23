@@ -177,17 +177,17 @@ int CredsManager::GetSM4SaltKey(EntryEncryptionFlag EncryptionFlag, C_Array<uint
 	}
 
 	int KeyIndx = (int)EncryptionFlag - ((int)EntryEncryptionFlag::SM4_PH3 - 1);
-	const int MaxKeyCount = Offsets::EntryBlock::KeyArraySM4Count - (2);
+	const int MaxKeyCount = Offsets::EntryBlock::KeyArraySM4.size() - (2);
 	if (KeyIndx < 0 || KeyIndx >= MaxKeyCount)
 	{
 		PRINT(PrintType_ERROR, "SM4 Key Index Outside Bounds (%d)[%02d] > [%02d]", EncryptionFlag, KeyIndx, MaxKeyCount-1);
 		return -1;
 	}
-
-	auto SM4KeyBuff = Offsets::EntryBlock::KeyArraySM4[2 + KeyIndx];
+	const int KeyArrIndx = 2 + KeyIndx;
+	auto SM4KeyBuff = Offsets::EntryBlock::KeyArraySM4[KeyArrIndx];
 	if (SM4KeyBuff == NULL)
 	{
-		PRINT(PrintType_ALERT, "SM4 Key Buffer NULL at Index: [%02d]", 2 + KeyIndx);
+		PRINT(PrintType_ALERT, "SM4 Key Buffer NULL at Index: [%02d]", KeyArrIndx);
 		return -3;
 	}
 
@@ -205,9 +205,9 @@ int	CredsManager::GenerateDynKey(int32_t EncryptionKeyID, C_Array<uint8_t>* Gene
 	if (EncryptionKeyID == -1) return -1;
 
 	int KeyIndex = EncryptionKeyID & 0xFFFFFF;
-	if (KeyIndex >= Offsets::EntryBlock::DynKeyArrayCount)
+	if (KeyIndex >= Offsets::EntryBlock::DynKeyArray.size())
 	{
-		PRINT(PrintType_ALERT, "DYN Key Index Outside Bounds [%02d] > [%02d] ", KeyIndex, Offsets::EntryBlock::DynKeyArrayCount-1);
+		PRINT(PrintType_ALERT, "DYN Key Index Outside Bounds [%02d] > [%02d] ", KeyIndex, Offsets::EntryBlock::DynKeyArray.size() -1);
 		return -2;
 	}
 	auto DynKeyBuff = Offsets::EntryBlock::DynKeyArray[KeyIndex];

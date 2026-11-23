@@ -23,7 +23,7 @@ int UnPacker::Start(PakLoadData* _LoadData)
 	Handler EntryUnPackHandler = Handler(_LoadData->_PakManager, &_LoadData->IndexHeader, &_LoadData->IndexData);
 
 	int ProcessedEntryCount = 0;
-	if (PakHeader.Version >= (int)PakFile_Version::IndexTextSection)
+	if (_LoadData->TextSection != NULL)
 	{
 		ProcessedEntryCount = EntryUnPackHandler.HandleTextSection(_LoadData->TextSection, &_LoadData->IndexEntries);
 	}
@@ -34,7 +34,7 @@ int UnPacker::Start(PakLoadData* _LoadData)
 
 	if (ProcessedEntryCount < 0)
 	{
-		PRINT(PrintType_ERROR, "Pak Entries(%04u) Handing Failure, Status: %04d.", ProcessedEntryCount, _LoadData->IndexHeader.NumEntries);
+		PRINT(PrintType_ERROR, "Pak Entries(%04u) Handing Failure, Status: %04d.", _LoadData->IndexHeader.NumEntries, ProcessedEntryCount);
 		return -22;
 	}
 	

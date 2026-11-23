@@ -10,8 +10,8 @@ namespace Offsets
 	const auto MaxBlockDataSize = 1024 * 1024;
 	namespace Header
 	{
-		extern unsigned char *Z_Fields_Key;
-		extern unsigned char* Z_Fields_IV;
+		extern C_Array<unsigned char> Z_Fields_Key;
+		extern C_Array<unsigned char> Z_Fields_IV;
 		extern int Z_Field_Count;
 		
 		extern PakInfoHeader Keys;
@@ -23,23 +23,20 @@ namespace Offsets
 	{
 		extern int NonCompressedFileContent;
 		
-		extern unsigned char* XORKey ;
+		extern C_Array<unsigned char> XORKey ;
 
 		extern unsigned char* RSA_Exponent;
 		extern unsigned int* RSA_Modulus;
 	}
 	namespace EntryBlock
 	{
-		extern unsigned char** KeyArraySM4;
-		extern int KeyArraySM4Count;
+		extern C_Array<unsigned char*> KeyArraySM4;
+		extern C_Array<unsigned char*> DynKeyArray;
 
-		extern unsigned char** DynKeyArray;
-		extern int DynKeyArrayCount;
+		extern C_Array<unsigned char> XORKey;
+		extern C_Array<unsigned char> SPKey;
 
-		extern unsigned char* XORKey;
-		extern unsigned char* SPKey;
-
-		extern unsigned char* SLM_Key;
+		extern C_Array<unsigned char> SLM_Key;
 		extern unsigned char ST_XorKey;
 	}
 
